@@ -1,5 +1,6 @@
-#include "zombie.h"
+#include <stdio.h>
 #include <stdlib.h>
+#include "zombie.h"
 
 void init_zombie(Zombie* zombie) {
     do {
