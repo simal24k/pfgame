@@ -18,7 +18,7 @@ int game_mode; // 1 for single player, 2 for multiplayer
 time_t start_time;
 
 void initialize_game() {
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     generate_maze(maze);
     init_player(&player1, 'X', 0, 0);
     if (game_mode == 2) {
@@ -37,7 +37,7 @@ void print_game_state() {
     if (game_mode == 2) {
         printf("Player 2 (Y) - Health: %d, Kills: %d\n", player2.health, player2.kills);
     }
-    int time_left = GAME_TIME - (time(NULL) - start_time);
+    int time_left = GAME_TIME - (int)(time(NULL) - start_time);
     printf("Time left: %d seconds\n", time_left);
 }
 
@@ -65,7 +65,20 @@ void update_game_state() {
     }
 }
 
+void setup_console() {
+    // Set console output to UTF-8
+    SetConsoleOutputCP(CP_UTF8);
+    // Enable ANSI escape sequences
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode = 0;
+    GetConsoleMode(hOut, &dwMode);
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
+}
+
 int main() {
+    setup_console();
+
     printf("Welcome to Zombie Apocalypse Maze!\n");
     printf("1. Single Player\n2. Multiplayer\nEnter your choice: ");
     scanf("%d", &game_mode);
@@ -74,12 +87,12 @@ int main() {
 
     while (!check_game_over()) {
         print_game_state();
-        if (kbhit()) {
-            char key = getch();
+        if (_kbhit()) {
+            int key = _getch();
             if (game_mode == 1 || (game_mode == 2 && key != 224)) { // Player 1 input
                 move_player(&player1, key, maze);
             } else if (game_mode == 2 && key == 224) { // Player 2 input (arrow keys)
-                key = getch(); // Get the actual arrow key
+                key = _getch(); // Get the actual arrow key
                 move_player(&player2, key, maze);
             }
         }
@@ -92,8 +105,6 @@ int main() {
     if (game_mode == 2) {
         printf("Player 2 (Y) - Kills: %d\n", player2.kills);
     }
-
-    // TODO: Implement high score saving and display
 
     return 0;
 }
