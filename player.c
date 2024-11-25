@@ -8,7 +8,7 @@ void init_player(Player* player, char symbol, int x, int y) {
     player->kills = 0;
 }
 
-void move_player(Player* player, char key, char maze[25][25]) {
+void move_player(Player* player, int key, char maze[25][25]) {
     int new_x = player->x;
     int new_y = player->y;
 
