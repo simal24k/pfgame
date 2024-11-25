@@ -9,6 +9,6 @@ typedef struct {
 } Player;
 
 void init_player(Player* player, char symbol, int x, int y);
-void move_player(Player* player, char key, char maze[25][25]);
+void move_player(Player* player, int key, char maze[25][25]);
 
 #endif
